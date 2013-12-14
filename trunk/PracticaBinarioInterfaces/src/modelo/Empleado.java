@@ -62,7 +62,6 @@ public class Empleado implements Serializable {
 		this.id = id;
 	}
 
-
 	/**
 	 * 
 	 * @param salario
@@ -71,15 +70,14 @@ public class Empleado implements Serializable {
 		this.salario = salario;
 	}
 	
-	
 	/**
 	 * Información del empleado
 	 */
 	public String toString() {
 		String s = "";
-		s += "ID: " + getId();
-		s += " Nombre: " + getNombre();
-		s += " Salario: " + getSalario();
+		s += " ID: " + getId();
+		s += "\n Nombre: " + getNombre();
+		s += " \n Salario: " + getSalario();
 		return s;
 	}
 }

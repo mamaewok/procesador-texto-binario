@@ -8,10 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
 /**
  * Genera los elementos gráficos básicos y contiene métodos que devuelven información de las cajas de texto
  * @author Ainhoa Suárez Sánchez
- *
  */
 public class Vista extends JFrame {
 
@@ -20,14 +21,12 @@ public class Vista extends JFrame {
 	private JPanel p2;
 	private JPanel p3;
 	private JTextField tfBuscar;
-	private JTextField tfNombreInser
-	;
+	private JTextField tfNombreInser;
 	private JTextField tfIdInser;
 	private JTextField tfID3;
 	private JTextField tfSueldoInser;
 	private JTextField tfSueldo3;
 	private JButton boton;
-	Listener listener = new Listener();
 
 	/**
 	 * Crea la vista al instanciar un objeto de la clase Vista
@@ -37,19 +36,19 @@ public class Vista extends JFrame {
 		this.setTitle("Gestor de Archivos Binarios");
 		this.setResizable(false);
 		this.setSize(400, 200);
-		JTabbedPane tp = new JTabbedPane();
+		
+		Listener listener = new Listener(this);
 		
 		p1 = new JPanel(new GridLayout(4,1));
 		
 			JLabel nombre = new JLabel("Nombre: ");
-			tfNombreInser = new JTextField(" ", 10);
+			tfNombreInser = new JTextField("", 10);
 			JLabel id = new JLabel("ID: ");
-			tfIdInser = new JTextField(" ", 10);
+			tfIdInser = new JTextField("", 10);
 			JLabel sueldo = new JLabel("Salario: ");
-			tfSueldoInser = new JTextField(" ", 10);
+			tfSueldoInser = new JTextField("", 10);
 	
-			boton = new BotonInsertar();
-			boton.setText("Insertar");
+			boton = new BotonInsertar("Insertar");
 			boton.addActionListener(listener);
 			JPanel pAux1 = new JPanel();
 			JPanel pAux2 = new JPanel();
@@ -70,9 +69,8 @@ public class Vista extends JFrame {
 		p2 = new JPanel();
 		
 			id = new JLabel("ID: ");
-			tfBuscar = new JTextField(" ", 10);
-			boton = new BotonBuscar();
-			boton.setText("Buscar");
+			tfBuscar = new JTextField("", 10);
+			boton = new BotonBuscar("Buscar");
 			boton.addActionListener(listener);
 			p2.add(id);
 			p2.add(tfBuscar);
@@ -81,11 +79,10 @@ public class Vista extends JFrame {
 		p3 = new JPanel(new GridLayout(3,1));
 		
 			id = new JLabel("ID: ");
-			tfID3 = new JTextField(" ", 10);
+			tfID3 = new JTextField("", 10);
 			sueldo = new JLabel("Sueldo: ");
-			tfSueldo3 = new JTextField(" ", 10);
-			boton = new BotonIncrementar();
-			boton.setText("Incrementar");
+			tfSueldo3 = new JTextField("", 10);
+			boton = new BotonIncrementar("Incrementar");
 			boton.addActionListener(listener);
 			JPanel panelAux1 = new JPanel();
 			JPanel panelAux2 = new JPanel();
@@ -99,16 +96,16 @@ public class Vista extends JFrame {
 			p3.add(panelAux2);
 			p3.add(panelAux3);
 		
-		tp.addTab("Insertar", p1);
-		tp.addTab("Buscar", p2);
-		tp.addTab("Incrementar", p3);
-		
+		JTabbedPane tp = new JTabbedPane();
+			tp.addTab("Insertar", p1);
+			tp.addTab("Buscar", p2);
+			tp.addTab("Incrementar", p3);
 		
 		this.getContentPane().add(tp);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	} // Acaba constructor
 
-	
 	//Acciones sobre los text field
 	/**
 	 * Hace accesible el nombre que introduzcamos en la caja de texto en el panel 1  //INSERTAR
@@ -119,49 +116,65 @@ public class Vista extends JFrame {
 	}
 	
 	/**
-	 * Hace accesible el ID que introduzcamos en la caja de texto ID en el panel 1
-	 * @return
+	 * Hace accesible en forma de integer el ID que introduzcamos en la caja de texto ID 
+	 * @return hace cast de String a int
 	 */
-	public String getTextIdInser() {
-		return tfIdInser.getText();
+	public int getTextIdInser() {
+		return Integer.parseInt(tfIdInser.getText());
 	}
 	
 	/**
-	 * Hace accesible el salario que introduzcamos en la caja de texto en el panel 1
-	 * @return
+	 * Hace accesible en forma de double el salario que introduzcamos en la caja de texto 
+	 * @return hace cast de String a double
 	 */
-	public String getTextSalarioInser() {
-		return tfSueldoInser.getText();
+	public double getTextSalarioInser() {
+		return Double.parseDouble(tfSueldoInser.getText());
 	}
-
-	
+	 /**
+	  * Vacia las cajas de texto de las opcion insertar
+	  */
+	public void vaciarTextInser(){
+		tfNombreInser.setText("");
+		tfIdInser.setText("");
+		tfSueldoInser.setText("");
+	}
 	
 	/**
 	 * Hace accesible el texto que introduzcamos en la caja de texto Buscar en el panel 2 //BUSCAR
-	 * @return
+	 * @return hace cast de String a int
 	 */
-	public String getTextBuscarID() {
-		return tfBuscar.getText();
+	public int getTextBuscarID() {
+		return Integer.parseInt(tfBuscar.getText());
 	}
 	
+	/**
+	 * Vacia las cajas de texto de las opcion buscar
+	 */
+	public void vaciarTextBuscar(){
+		tfBuscar.setText("");
+	}
 	
 	/**
 	 * Hace accesible el ID que introduzcamos en la caja de texto ID en el panel 3  //INCREMENTAR
-	 * @return
+	 * @return hace cast de String a int
 	 */
-	public String getIncrementarID() {
-		return tfID3.getText();
+	public int getIncrementarID() {
+		return Integer.parseInt(tfID3.getText());
 	}
 
 	/**
 	 * Hace accesible el salario que introduzcamos en la caja de texto salario en el panel 3
 	 * @return
 	 */
-	public String getIncrementarSalario3() {
-		return tfSueldo3.getText();
+	public double getIncrementarSalario3() {
+		return Double.parseDouble(tfSueldo3.getText());
 	}
-
 	
-
-	
+	/**
+	 * Vacia las cajas de texto de las opcion incrementar
+	 */
+	public void vaciarTextIncrem(){
+		tfID3.setText("");
+		tfSueldo3.setText("");
+	}
 }
