@@ -1,14 +1,18 @@
 package vista;
 
 import javax.swing.JButton;
-
+/**
+ * 
+ * @author Ainhoa Suárez Sánchez
+ *
+ */
 public class BotonIncrementar extends JButton{
   
-	private static final long serialVersionUID = 7435396172905923758L;
+	private static final long serialVersionUID = 1L;
 
-	public BotonIncrementar()
-	{
+	public BotonIncrementar(String nombre){
 		super();
+		this.setText(nombre);
 	}
     
 }

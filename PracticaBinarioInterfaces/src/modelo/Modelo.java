@@ -1,118 +1,58 @@
 package modelo;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 /**
  * Contiene las operaciones básicas a realizar sobre documentos
  * @author Ainhoa Suárez Sánchez
  *
  */
 public class Modelo {
-	
+	private final File PATH = new File(".\\empleados.bin");
 	private ArrayList<Empleado> listaEmpleados;
-
-	/**
-	 * Crea la lista de empleados y el fichero binario en caso de que no esté
-	 * creado ya
-	 * 
-	 * @param rutaCSV
-	 *            ruta del fichero con los datos para el binario
-	 * @param rutaBin
-	 *            ruta del fichero que se está creando
-	 */
-	public Modelo(String rutaCSV, String rutaBin) {
-		listaEmpleados = new ArrayList<Empleado>();
-		leerFicheroCSV(rutaCSV);
-		crearFicheroBin(rutaBin);
-	}
 
 	/**
 	 * Se usa en caso de que le fichero bin ya este creado
 	 * 
 	 * @param rutaBin
 	 */
-	public Modelo(String rutaBin) {
+	public Modelo() {
 		listaEmpleados = new ArrayList<Empleado>();
-		
+		crearFicheroBin(PATH);
 	}
 	
 	/**
-	 * Lee y devuelve los datos de un fichero csv o txt sobre empelados
+	 * Crea el fichero de Registros con el que trabajaremos y lo pasa a un temporal antes
+	 * de borrar el original (crea y guarda)
 	 * 
-	 * @param rutaTxt
-	 *            direccion del fichero a leer
-	 * @return los datos de el fichero
+	 * @param fichero
+	 *            direccion del fichero creado //Añadir con scanner
 	 */
-	public void leerFicheroCSV(String rutaTxt) {
-
-		FileReader f = null;
-		BufferedReader bf = null;
-		String linea;
+	public void crearFicheroBin(File fichero) {
+		File temporal = new File (fichero.getAbsolutePath() + ".tmp");
 		
-		try {
-			File fichero = new File(rutaTxt);
-			f = new FileReader(fichero);
-			bf = new BufferedReader(f);
-
-			StringTokenizer tokens = null;
-			while ((linea = bf.readLine()) != null) {
-				tokens = new StringTokenizer(linea, ","); 
-				
-				int id = Integer.parseInt(tokens.nextToken());
-				String nombre = tokens.nextToken();
-				double salario = Double.parseDouble(tokens.nextToken());
-				
-				Empleado empleado = new Empleado(id, nombre, salario);
-
-				listaEmpleados.add(empleado);
-			}
-		} catch (FileNotFoundException fnfe) {
-			System.out.println("El fichero no se encuentra");
-		} catch (IOException e) {
-			System.out.println("Error de E/S");
-		} finally {
-			try {
-				f.close();
-			} catch (IOException e) {
-				System.out.println("No se ha podido cerrar el archivo");
-			}
-		}
-	}
-
-	/**
-	 * Crea un fichero binario con objetos de tipo empleado
-	 * 
-	 * @param rutaBin
-	 *            ruta del fichero nuevo que se crea
-	 * 
-	 */
-	public void crearFicheroBin(String rutaBin) {
-
 		ObjectOutputStream dataOS = null;
 		try {
-			File fichero = new File(rutaBin);
-			FileOutputStream filein = new FileOutputStream(fichero);
+			FileOutputStream filein = new FileOutputStream(temporal);
 			dataOS = new ObjectOutputStream(filein);
 
-			for (Empleado emp : listaEmpleados) {
-				dataOS.writeObject(emp);
+			for (Empleado e : listaEmpleados) {
+				dataOS.writeObject(e);
 			}
 		} catch (IOException ioe) {
-			System.out.println("Error en E/S");
+			System.err.println("Error en E/S en fichero BIN");
 		} finally {
 			try {
 				dataOS.close();
 			} catch (IOException e) {
-				System.out.println("No se ha podido cerrar el archivo");
+				System.err.println("No se ha podido cerrar el archivo BIN");
 			}
 		}
+		temporal.renameTo(fichero);
+		fichero.delete();
 	}
 	
 	/**
@@ -143,12 +83,13 @@ public class Modelo {
 	 * @param comision
 	 * @param numDep
 	 */
-	public void introducirEmpleado(int id, String nombre, double salario){
+	public String introducirEmpleado(int id, String nombre, double salario){
 		Empleado empleado = new Empleado(id, nombre, salario);
 		listaEmpleados.add(empleado);
+		crearFicheroBin(PATH);
+		
+		return empleado.toString();
 	}
-	
-	
 	
 	/**
 	 * @return the listaEmp
