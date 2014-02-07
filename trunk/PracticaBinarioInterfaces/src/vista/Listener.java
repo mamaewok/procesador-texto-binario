@@ -6,6 +6,7 @@ package vista;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JOptionPane;
 
@@ -20,10 +21,21 @@ public class Listener implements ActionListener {
 
 	private Vista vista;
 	private Modelo modelo;
-
+	private String rutaCSV = "empleados.csv";
+	private String rutaBin = "empleados.bin";
+	
+	/**
+	 * Constructor que pasa una vista como parámetro e inicializa el modelo, creando el fichero bin en caso de que no este creado ya
+	 * @param vista
+	 */
 	public Listener(Vista vista) {
 		this.vista = vista;
-		modelo = new Modelo();
+		File rutaAux = new File(rutaBin);
+		if(rutaAux.exists())
+			modelo = new Modelo(rutaBin);
+		else
+			modelo = new Modelo(rutaCSV, rutaBin);
+
 	}
 
 	@Override
@@ -52,7 +64,7 @@ public class Listener implements ActionListener {
 					vista.getTextNombreInser(), vista.getTextSalarioInser());
 			JOptionPane.showMessageDialog(vista, "Empleado insertado con éxito");
 		}
-		vista.vaciarTextInser();
+		vista.vaciarCajastInser();
 	}
 
 	/**
@@ -61,8 +73,8 @@ public class Listener implements ActionListener {
 	private void buscar() {
 		Object mnsj;
 		
-		if(modelo.buscarEmpleado(vista.getTextBuscarID())!= null){
-			Empleado e = modelo.buscarEmpleado(vista.getTextBuscarID());
+		if(modelo.buscarEmpleado(vista.getTextIdBuscar())!= null){
+			Empleado e = modelo.buscarEmpleado(vista.getTextIdBuscar());
 			mnsj = e.toString();
 			JOptionPane.showMessageDialog(vista, mnsj, "Información de empleado", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -70,7 +82,7 @@ public class Listener implements ActionListener {
 			mnsj = "Empleado no existe";
 			JOptionPane.showMessageDialog(vista, mnsj, "Error",JOptionPane.WARNING_MESSAGE);
 			}
-		vista.vaciarTextBuscar();
+		vista.vaciarCajaBuscar();
 		}
 
 	/**
@@ -79,9 +91,9 @@ public class Listener implements ActionListener {
 	private void incrementar() {
 		Object mnsj;
 		
-		if(modelo.buscarEmpleado(vista.getIncrementarID())!= null){
-			Empleado e = modelo.buscarEmpleado(vista.getIncrementarID());
-			double salarioTotal = e.getSalario() + vista.getIncrementarSalario3();
+		if(modelo.buscarEmpleado(vista.getIdIncrementar())!= null){
+			Empleado e = modelo.buscarEmpleado(vista.getIdIncrementar());
+			double salarioTotal = e.getSalario() + vista.getSalarioIncrementar();
 			e.setSalario(salarioTotal);
 			mnsj = e.toString();
 			JOptionPane.showMessageDialog(vista, mnsj, "Información actualizada ", JOptionPane.INFORMATION_MESSAGE);	

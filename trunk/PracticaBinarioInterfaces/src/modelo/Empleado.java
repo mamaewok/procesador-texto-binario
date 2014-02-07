@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class Empleado implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 13241365L;
 	private String nombre;
 	private double salario;
 	private int id;
