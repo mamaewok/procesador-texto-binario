@@ -1,0 +1,1 @@
+Este es un procesador que trabaja con un archivo de trabajadores en formato .bin y realiza las acciones de insertar, buscar e incrementar.
